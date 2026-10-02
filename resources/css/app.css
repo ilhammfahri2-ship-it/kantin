@@ -39,38 +39,38 @@
    ───────────────────────────────────────────────────────────────────────────── */
 :root {
     color-scheme: light;
-    --bg-canvas:        #f8fafc; /* slate-50  */
+    --bg-canvas:        #f4f1ea; /* Muted warm grey/beige */
     --bg-surface:       #ffffff;
-    --bg-surface-2:     #f1f5f9; /* slate-100 */
-    --bg-surface-3:     #e2e8f0; /* slate-200 */
-    --text-primary:     #0f172a; /* slate-900 */
-    --text-secondary:   #475569; /* slate-600 */
-    --text-muted:       #94a3b8; /* slate-400 */
-    --border-default:   #e2e8f0; /* slate-200 */
-    --border-strong:    #cbd5e1; /* slate-300 */
-    --brand:            #059669; /* emerald-600 */
-    --brand-hover:      #047857; /* emerald-700 */
+    --bg-surface-2:     #e8e4db;
+    --bg-surface-3:     #d5cfc1;
+    --text-primary:     #2c2a26; /* Dark charcoal/brown */
+    --text-secondary:   #5b574f; 
+    --text-muted:       #8c867a;
+    --border-default:   #d5cfc1;
+    --border-strong:    #a39e93;
+    --brand:            #3e3b36; /* Charcoal/Dark Muted Brown */
+    --brand-hover:      #262420;
     --brand-text:       #ffffff;
-    --shadow-card:      0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
-    --shadow-card-hover:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-card:      0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    --shadow-card-hover:0 4px 10px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
 }
 
 .dark {
     color-scheme: dark;
-    --bg-canvas:        #090d16;
-    --bg-surface:       #111827; /* gray-900  */
-    --bg-surface-2:     #1f2937; /* gray-800  */
-    --bg-surface-3:     #374151; /* gray-700  */
-    --text-primary:     #f1f5f9; /* slate-100 */
-    --text-secondary:   #94a3b8; /* slate-400 */
-    --text-muted:       #64748b; /* slate-500 */
-    --border-default:   #1f2937; /* gray-800  */
-    --border-strong:    #374151; /* gray-700  */
-    --brand:            #10b981; /* emerald-500 */
-    --brand-hover:      #34d399; /* emerald-400 */
-    --brand-text:       #ffffff;
-    --shadow-card:      0 1px 3px 0 rgb(0 0 0 / 0.4);
-    --shadow-card-hover:0 4px 6px -1px rgb(0 0 0 / 0.5);
+    --bg-canvas:        #1a1918; /* Very dark warm charcoal */
+    --bg-surface:       #242220; 
+    --bg-surface-2:     #2e2b28; 
+    --bg-surface-3:     #3a3733; 
+    --text-primary:     #e6e1d8; /* Muted bone white */
+    --text-secondary:   #b3ad9f; 
+    --text-muted:       #807b70; 
+    --border-default:   rgba(230, 225, 216, 0.08); 
+    --border-strong:    rgba(230, 225, 216, 0.16);
+    --brand:            #a69076; /* Muted Gold/Bronze */
+    --brand-hover:      #c2ac91; 
+    --brand-text:       #1a1918;
+    --shadow-card:      0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(230, 225, 216, 0.05);
+    --shadow-card-hover:0 12px 30px -4px rgba(0, 0, 0, 0.7), 0 0 24px -2px rgba(166, 144, 118, 0.15), 0 0 0 1px rgba(166, 144, 118, 0.3);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -83,26 +83,172 @@ html {
 body {
     background-color: var(--bg-canvas);
     color: var(--text-primary);
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   KOMPONEN: KARTU PRODUK
+   EFEK BACKGROUND & AMBIENT ATMOSPHERE (MODE GELAP & TERANG)
    ───────────────────────────────────────────────────────────────────────────── */
+.bg-ambient-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Pola Grid / Dot Matrix yang Elegan */
+.bg-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 95%);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.dark .bg-grid-overlay {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.2px, transparent 1.2px);
+    opacity: 0.85;
+}
+
+/* Ambient Glowing Orbs */
+.glow-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(85px);
+    pointer-events: none;
+    opacity: 0; /* HIDE IN LIGHT MODE FOR BETTER CONTRAST */
+    transition: opacity 0.5s ease;
+}
+
+.dark .glow-orb {
+    opacity: 0.9;
+}
+
+/* Orb 1: Emerald Light (Top-Left) */
+.glow-orb-emerald {
+    top: -10%;
+    left: -5%;
+    width: 42vw;
+    height: 42vw;
+    min-width: 320px;
+    min-height: 320px;
+    background: radial-gradient(circle, rgba(166, 144, 118, 0.15) 0%, rgba(166, 144, 118, 0.04) 55%, transparent 75%);
+    animation: orb-float-1 18s ease-in-out infinite alternate;
+}
+
+/* Orb 2: Deep Indigo / Violet (Top-Right) */
+.glow-orb-indigo {
+    top: -8%;
+    right: -8%;
+    width: 45vw;
+    height: 45vw;
+    min-width: 360px;
+    min-height: 360px;
+    background: radial-gradient(circle, rgba(100, 95, 85, 0.18) 0%, rgba(100, 95, 85, 0.04) 50%, transparent 75%);
+    animation: orb-float-2 22s ease-in-out infinite alternate;
+}
+
+/* Orb 3: Cyan / Teal Accent (Center-Bottom) */
+.glow-orb-teal {
+    top: 55%;
+    left: 25%;
+    width: 40vw;
+    height: 40vw;
+    min-width: 300px;
+    min-height: 300px;
+    background: radial-gradient(circle, rgba(140, 125, 105, 0.12) 0%, rgba(140, 125, 105, 0.03) 55%, transparent 75%);
+    animation: orb-float-3 26s ease-in-out infinite alternate;
+}
+
+@keyframes orb-float-1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(40px, 30px) scale(1.1); }
+    100% { transform: translate(-20px, 50px) scale(0.95); }
+}
+
+@keyframes orb-float-2 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-50px, 40px) scale(1.08); }
+    100% { transform: translate(30px, -20px) scale(0.92); }
+}
+
+@keyframes orb-float-3 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(30px, -40px) scale(1.12); }
+    100% { transform: translate(-40px, 20px) scale(0.98); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   KOMPONEN: KARTU PRODUK (Glassmorphism & Micro-Interactions)
+   ───────────────────────────────────────────────────────────────────────────── */
+/* ── Kartu Produk (sistem BEM yang rapi) ── */
 .product-card {
-    background-color: var(--bg-surface);
+    background-color: color-mix(in srgb, var(--bg-surface) 90%, transparent);
     border: 1px solid var(--border-default);
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     overflow: hidden;
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* Flexbox vertikal agar konten tidak tumpang-tindih */
+    display: flex;
+    flex-direction: column;
 }
 .product-card:hover {
     box-shadow: var(--shadow-card-hover);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
 }
+
+/* ── Area Foto: ukuran kecil, tetap, seragam ── */
+.product-card__img {
+    position: relative;
+    width: 100%;
+    height: 110px;        /* foto kecil, sama di semua kartu */
+    flex-shrink: 0;       /* tidak boleh mengecil */
+    overflow: hidden;
+}
+.product-card__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover .product-card__img img {
+    transform: scale(1.06);
+}
+
+/* ── Area Teks: mengisi sisa ruang kartu ── */
+.product-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    min-height: 0;        /* cegah overflow */
+    overflow: hidden;
+}
+
+/* ── Footer: harga + tombol selalu di bawah ── */
+.product-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;     /* dorong selalu ke bawah kartu */
+    padding-top: 0.5rem;
+}
+
 
 /* ─────────────────────────────────────────────────────────────────────────────
    KOMPONEN: TOMBOL BRAND
@@ -110,8 +256,8 @@ body {
 .btn-brand {
     background-color: var(--brand);
     color: var(--brand-text);
-    padding: 0.375rem 0.75rem;
-    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
     font-weight: 600;
     border-radius: 0.5rem;
     border: none;
@@ -151,8 +297,8 @@ body {
    KOMPONEN: BADGE STOK
    ───────────────────────────────────────────────────────────────────────────── */
 .badge-stock-available {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: #e8e4db;
+    color: #3e3b36;
     font-size: 0.625rem;
     font-weight: 700;
     padding: 0.125rem 0.5rem;
@@ -161,12 +307,12 @@ body {
     text-transform: uppercase;
 }
 .dark .badge-stock-available {
-    background-color: #064e3b;
-    color: #6ee7b7;
+    background-color: #2e2b28;
+    color: #c2ac91;
 }
 .badge-stock-low {
-    background-color: #fef3c7;
-    color: #92400e;
+    background-color: #f0e6d2;
+    color: #8a6a42;
     font-size: 0.625rem;
     font-weight: 700;
     padding: 0.125rem 0.5rem;
@@ -175,12 +321,12 @@ body {
     text-transform: uppercase;
 }
 .dark .badge-stock-low {
-    background-color: #451a03;
-    color: #fcd34d;
+    background-color: #383025;
+    color: #dcb37b;
 }
 .badge-stock-out {
-    background-color: #f1f5f9;
-    color: #64748b;
+    background-color: #f4f1ea;
+    color: #8c867a;
     font-size: 0.625rem;
     font-weight: 700;
     padding: 0.125rem 0.5rem;
@@ -189,8 +335,8 @@ body {
     text-transform: uppercase;
 }
 .dark .badge-stock-out {
-    background-color: #1e293b;
-    color: #475569;
+    background-color: #242220;
+    color: #807b70;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

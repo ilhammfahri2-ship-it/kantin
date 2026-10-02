@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- ── SEO ─────────────────────────────────────────────────────────── --}}
-    <title>@yield('title', 'e-Kantin') — Pesan Makanan Tanpa Antre</title>
+    <title>@yield('title', 'KantinSchooll') — Pesan Makanan Tanpa Antre</title>
     <meta name="description" content="@yield('meta_description', 'Pesan makanan dari kantin favoritmu secara digital, mudah, cepat, tanpa harus mengantri.')">
 
     {{-- ── Favicon (SVG inline, tidak perlu file eksternal) ───────────── --}}
@@ -94,27 +94,27 @@
 >
 
     {{-- ══════════════════════════════════════════════════════════════════
+         BACKGROUND ATMOSPHERE & AMBIENT GLOW EFFECTS (Mode Gelap & Terang)
+    ══════════════════════════════════════════════════════════════════════ --}}
+    <div class="bg-ambient-container" aria-hidden="true">
+        <div class="glow-orb glow-orb-emerald"></div>
+        <div class="glow-orb glow-orb-indigo"></div>
+        <div class="glow-orb glow-orb-teal"></div>
+        <div class="bg-grid-overlay"></div>
+    </div>
+
+    {{-- ══════════════════════════════════════════════════════════════════
          NAVBAR
     ══════════════════════════════════════════════════════════════════════ --}}
-    <header class="navbar" id="main-navbar">
+    <header class="navbar relative z-20" id="main-navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
             {{-- Brand Logo --}}
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0" aria-label="e-Kantin Beranda">
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 shrink-0" aria-label="KantinSchooll Beranda">
                 <span class="text-2xl leading-none select-none" aria-hidden="true">🍱</span>
-                <span class="font-bold text-base tracking-tight" style="color: var(--brand);">e-Kantin</span>
+                <span class="font-bold text-base tracking-tight" style="color: var(--brand);">KantinSchooll</span>
             </a>
 
-            {{-- Navigasi Tengah (Desktop) --}}
-            <nav class="hidden md:flex items-center gap-6" aria-label="Navigasi utama">
-                <a href="{{ route('home') }}"
-                   class="text-sm font-medium transition-colors duration-150 hover:opacity-80 {{ request()->routeIs('home') ? 'text-brand font-semibold' : '' }}"
-                   style="{{ request()->routeIs('home') ? 'color: var(--brand);' : 'color: var(--text-secondary);' }}"
-                >
-                    Menu
-                </a>
-                {{-- Tambahkan link navigasi lain di sini (Riwayat Pesanan, dll.) --}}
-            </nav>
 
             {{-- Aksi Kanan --}}
             <div class="flex items-center gap-2 shrink-0">
@@ -139,6 +139,19 @@
                     </svg>
                 </button>
 
+                {{-- Pesanan Saya --}}
+                <a href="{{ route('orders.index') }}"
+                   class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150"
+                   style="color: var(--text-primary); {{ request()->routeIs('orders.index') ? 'background-color: var(--bg-surface-2);' : 'hover:background-color: var(--bg-surface-2);' }}"
+                   aria-label="Pesanan Saya"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                    <span class="hidden sm:inline">Pesanan Saya</span>
+                </a>
+
                 {{-- Keranjang Belanja --}}
                 <a href="{{ route('cart.index') }}"
                    class="relative flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150"
@@ -161,13 +174,7 @@
                 </a>
 
                 {{-- Auth Links --}}
-                @guest
-                    <a href="{{ route('login') }}"
-                       class="text-sm font-medium px-3 py-2 rounded-lg transition-colors duration-150"
-                       style="color: var(--text-secondary);"
-                    >Masuk</a>
-                    <a href="{{ route('register') }}" class="btn-brand">Daftar</a>
-                @else
+                @auth
                     {{-- User dropdown (Alpine) --}}
                     <div class="relative" x-data="{ open: false }">
                         <button
@@ -217,7 +224,7 @@
                             </form>
                         </div>
                     </div>
-                @endguest
+                @endauth
             </div>
         </div>
     </header>
@@ -260,23 +267,26 @@
     {{-- ══════════════════════════════════════════════════════════════════
          KONTEN HALAMAN
     ══════════════════════════════════════════════════════════════════════ --}}
-    <main id="main-content" tabindex="-1">
+    <main id="main-content" class="relative z-10" tabindex="-1">
         @yield('content')
     </main>
 
     {{-- ══════════════════════════════════════════════════════════════════
          FOOTER
     ══════════════════════════════════════════════════════════════════════ --}}
-    <footer class="mt-16 border-t" style="border-color: var(--border-default);">
+    <footer class="mt-16 border-t relative z-10" style="border-color: var(--border-default);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm" style="color: var(--text-muted);">
                 <div class="flex items-center gap-2">
                     <span>🍱</span>
-                    <span class="font-semibold" style="color: var(--brand);">e-Kantin</span>
+                    <span class="font-semibold" style="color: var(--brand);">KantinSchooll</span>
                     <span>—</span>
                     <span>Pesan makanan tanpa antre.</span>
                 </div>
-                <p>© {{ date('Y') }} e-Kantin. Semua hak dilindungi.</p>
+                <div class="flex items-center gap-4 mt-2 sm:mt-0">
+                    <a href="{{ route('dashboard.index') }}" class="hover:text-brand transition-colors">Admin Panel</a>
+                    <p>© {{ date('Y') }} KantinSchooll.</p>
+                </div>
             </div>
         </div>
     </footer>

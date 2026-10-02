@@ -60,9 +60,28 @@ class Product extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return $this->image
-            ? asset('storage/' . $this->image)
-            : asset('images/default-product.svg');
+        if (! $this->image) {
+            // Cek apakah ada file lokal berdasarkan slug
+            $slugImage = 'images/products/' . $this->slug . '.jpg';
+            if (file_exists(public_path($slugImage))) {
+                return asset($slugImage);
+            }
+            return asset('images/default-product.svg');
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        if (str_starts_with($this->image, 'images/')) {
+            return asset($this->image);
+        }
+
+        if (file_exists(public_path('images/products/' . $this->image))) {
+            return asset('images/products/' . $this->image);
+        }
+
+        return asset('storage/' . $this->image);
     }
 
     public function getFormattedPriceAttribute(): string

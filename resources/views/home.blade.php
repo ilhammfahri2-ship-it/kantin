@@ -8,13 +8,48 @@
 
     {{-- ── HERO ────────────────────────────────────────────────────────── --}}
     <div class="mb-8">
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-1.5" style="color: var(--text-primary);">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-3 border shadow-sm backdrop-blur-md"
+             style="background: color-mix(in srgb, var(--brand) 12%, transparent); border-color: color-mix(in srgb, var(--brand) 28%, transparent); color: var(--brand);">
+            <span class="w-2 h-2 rounded-full animate-pulse" style="background-color: var(--brand);"></span>
+            <span>Kantin Digital • Pesan Cepat Tanpa Antre</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 leading-tight" style="color: var(--text-primary);">
             Mau pesan apa hari ini?
         </h1>
-        <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-            Pilih menu favoritmu dari kantin pilihan — tanpa harus mengantri.
+        <p class="text-sm sm:text-base max-w-2xl leading-relaxed" style="color: var(--text-secondary);">
+            Jelajahi beragam hidangan lezat dari aneka tenant pilihan — praktis, cepat, dan siap saji saat kamu tiba.
         </p>
     </div>
+
+    {{-- ── PROMO BANNER ─────────────────────────────────────────────────── --}}
+    <div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 shadow-lg text-white" style="background: linear-gradient(to right, #10b981, #2dd4bf); margin-bottom: 40px;">
+        <!-- Background Decor -->
+        <div class="absolute -right-10 -top-10 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-black opacity-10 rounded-full blur-2xl"></div>
+        
+        <div class="relative z-10">
+            <span class="inline-block px-3 py-1 bg-white/20 text-white text-xs font-bold rounded-full mb-3 backdrop-blur-sm border border-white/20 uppercase tracking-wider">
+                Promo Khusus Hari Ini! 🎊
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold mb-2 leading-tight">Makan Kenyang, Kantong Tenang</h2>
+            <p class="text-white text-sm sm:text-base max-w-lg" style="opacity: 0.9;">
+                Nikmati diskon spesial di berbagai tenant kantin pilihan. Pesan sekarang melalui e-Kantin, bebas antre, dan maksimalkan jam istirahatmu!
+            </p>
+        </div>
+    </div>
+
+    {{-- ── PERINGATAN KANTIN TUTUP ────────────────────────────────────────── --}}
+    @if(!$isOpen)
+    <div class="mb-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+        <span class="text-2xl mt-0.5">🛑</span>
+        <div>
+            <h3 class="font-bold text-red-800 dark:text-red-400">Kantin Sedang Tutup</h3>
+            <p class="text-sm text-red-600 dark:text-red-300 mt-1">
+                Jam operasional e-Kantin adalah <b>{{ $openTime->format('H:i') }} - {{ $closeTime->format('H:i') }} WIB</b>. Saat ini kamu tidak bisa memesan makanan.
+            </p>
+        </div>
+    </div>
+    @endif
 
     {{-- ── FILTER & PENCARIAN ──────────────────────────────────────────── --}}
     <div x-data="catalogFilter()" class="mb-6">
@@ -46,8 +81,8 @@
                 <template x-for="cat in categories" :key="cat.value">
                     <button
                         @click="activeCategory = cat.value"
-                        :class="activeCategory === cat.value ? 'btn-brand' : ''"
-                        class="px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-150"
+                        :class="activeCategory === cat.value ? 'btn-brand shadow-sm' : ''"
+                        class="px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-150"
                         :style="activeCategory !== cat.value ? 'background-color: var(--bg-surface); color: var(--text-secondary); border-color: var(--border-default);' : 'border-color: transparent;'"
                         x-text="cat.label"
                         :aria-pressed="activeCategory === cat.value"
@@ -65,7 +100,7 @@
                 <p class="text-sm" style="color: var(--text-muted);">Coba lagi nanti atau hubungi pengelola kantin.</p>
             </div>
         @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="product-grid">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3" id="product-grid">
                 @foreach($products as $product)
                     <div
                         class="product-card"
@@ -75,20 +110,20 @@
                         x-transition:enter-end="opacity-100 scale-100"
                         id="product-{{ $product->id }}"
                     >
-                        {{-- Gambar Produk --}}
-                        <div class="relative h-40 overflow-hidden"
+                        {{-- Gambar Produk (kecil, seragam) --}}
+                        <div class="product-card__img"
                              style="background-color: var(--bg-surface-2);">
                             @if($product->image)
                                 <img
                                     src="{{ $product->image_url }}"
                                     alt="{{ $product->name }}"
-                                    class="w-full h-full object-cover"
+                                    class="w-full h-full object-cover transition-transform duration-500 ease-out"
                                     loading="lazy"
                                 >
                             @else
                                 {{-- Placeholder SVG bila tidak ada gambar --}}
                                 <div class="w-full h-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 opacity-25" style="color: var(--text-muted);"
+                                    <svg class="w-10 h-10 opacity-25" style="color: var(--text-muted);"
                                          fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                                               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -96,39 +131,42 @@
                                 </div>
                             @endif
 
+                            {{-- Subtle gradient overlay --}}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10 pointer-events-none"></div>
+
                             {{-- Badge Stok di atas gambar --}}
-                            <div class="absolute top-2.5 left-2.5">
+                            <div class="absolute top-2 left-2 z-10">
                                 @if($product->stock <= 0 || !$product->is_available)
-                                    <span class="badge-stock-out">Habis</span>
+                                    <span class="badge-stock-out shadow-sm">Habis</span>
                                 @elseif($product->stock <= 5)
-                                    <span class="badge-stock-low">Sisa {{ $product->stock }}</span>
+                                    <span class="badge-stock-low shadow-sm">Sisa {{ $product->stock }}</span>
                                 @else
-                                    <span class="badge-stock-available">Tersedia</span>
+                                    <span class="badge-stock-available shadow-sm">Tersedia</span>
                                 @endif
                             </div>
 
                             {{-- Badge Unggulan --}}
                             @if($product->is_featured)
-                                <div class="absolute top-2.5 right-2.5">
-                                    <span class="text-[0.625rem] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider"
+                                <div class="absolute top-2 right-2 z-10">
+                                    <span class="text-[0.625rem] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1"
                                           style="background-color: var(--brand); color: #fff;">
-                                        Unggulan
+                                        ★ Favorit
                                     </span>
                                 </div>
                             @endif
                         </div>
 
                         {{-- Info Produk --}}
-                        <div class="p-4">
+                        <div class="product-card__body">
                             {{-- Nama Tenant --}}
                             <a href="#"
-                               class="text-[0.65rem] font-semibold uppercase tracking-wider hover:opacity-75 transition-opacity"
+                               class="text-[0.65rem] font-bold uppercase tracking-wider hover:opacity-75 transition-opacity block truncate"
                                style="color: var(--brand);">
                                 {{ $product->tenant->name }}
                             </a>
 
                             {{-- Nama Produk --}}
-                            <h3 class="font-semibold text-sm mt-0.5 leading-snug" style="color: var(--text-primary);">
+                            <h3 class="font-bold text-sm mt-0.5 leading-snug truncate" style="color: var(--text-primary);" title="{{ $product->name }}">
                                 {{ $product->name }}
                             </h3>
 
@@ -137,22 +175,30 @@
                                 <p class="text-xs mt-1 line-clamp-2 leading-relaxed" style="color: var(--text-muted);">
                                     {{ $product->description }}
                                 </p>
+                            @else
+                                <p class="text-xs mt-1 text-transparent select-none leading-relaxed">-</p>
                             @endif
 
-                            {{-- Harga + Tombol --}}
-                            <div class="flex items-center justify-between mt-3.5 gap-2">
-                                <span class="font-bold text-sm" style="color: var(--text-primary);">
+                            {{-- Harga + Tombol (selalu di bawah) --}}
+                            <div class="product-card__footer">
+                                <span class="font-extrabold text-sm" style="color: var(--text-primary);">
                                     {{ $product->formatted_price }}
                                 </span>
 
-                                @if($product->stock > 0 && $product->is_available)
+                                @if(!$isOpen)
+                                    <span class="text-[0.65rem] sm:text-xs px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider"
+                                          style="background-color: var(--bg-surface-2); color: #ef4444;">
+                                        Tutup
+                                    </span>
+                                @elseif($product->stock > 0 && $product->is_available)
                                     <button
                                         onclick="handleAddToCart({
                                             productId: {{ $product->id }},
                                             name: '{{ addslashes($product->name) }}',
                                             price: {{ $product->price }},
                                             tenantId: {{ $product->tenant_id }},
-                                            tenantName: '{{ addslashes($product->tenant->name) }}'
+                                            tenantName: '{{ addslashes($product->tenant->name) }}',
+                                            image: '{{ $product->image_url ?? '' }}'
                                         }, this)"
                                         class="btn-inverse text-xs shrink-0"
                                         id="add-to-cart-{{ $product->id }}"

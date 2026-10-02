@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
     {
         // ── 1. Admin ──────────────────────────────────────────────────────────
         $admin = User::firstOrCreate(
-            ['email' => 'admin@ekantin.test'],
+            ['email' => 'admin123@gmail.com'],
             [
-                'name'     => 'Admin e-Kantin',
+                'name'     => 'Admin KantinSchooll',
                 'password' => bcrypt('password'),
                 'role'     => 'admin',
                 'phone'    => '081200000000',
@@ -41,10 +41,10 @@ class DatabaseSeeder extends Seeder
                     'close_at'    => '14:00:00',
                 ],
                 'products' => [
-                    ['name' => 'Nasi Ayam Penyet',    'price' => 15000, 'category' => 'makanan_berat',  'stock' => 20, 'is_featured' => true,  'description' => 'Nasi putih dengan ayam penyet crispy, sambal terasi, dan lalapan segar.'],
-                    ['name' => 'Nasi Tempe Orek',     'price' => 10000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => false, 'description' => 'Nasi putih dengan tempe orek manis pedas khas rumahan.'],
-                    ['name' => 'Es Teh Manis',        'price' => 3000,  'category' => 'minuman',        'stock' => 50, 'is_featured' => false, 'description' => 'Teh hitam segar dengan es batu dan gula pilihan.'],
-                    ['name' => 'Es Jeruk Peras',      'price' => 5000,  'category' => 'minuman',        'stock' => 30, 'is_featured' => false, 'description' => 'Jeruk segar diperas langsung, dingin menyegarkan.'],
+                    ['name' => 'Nasi Ayam Penyet',    'price' => 15000, 'category' => 'makanan_berat',  'stock' => 20, 'is_featured' => true,  'image' => 'images/products/nasi-ayam-penyet.jpg', 'description' => 'Nasi putih dengan ayam penyet crispy, sambal terasi, dan lalapan segar.'],
+                    ['name' => 'Nasi Tempe Orek',     'price' => 10000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => false, 'image' => 'images/products/nasi-tempe-orek.jpg',  'description' => 'Nasi putih dengan tempe orek manis pedas khas rumahan.'],
+                    ['name' => 'Es Teh Manis',        'price' => 3000,  'category' => 'minuman',        'stock' => 50, 'is_featured' => false, 'image' => 'images/products/es-teh-manis.jpg',     'description' => 'Teh hitam segar dengan es batu dan gula pilihan.'],
+                    ['name' => 'Es Jeruk Peras',      'price' => 5000,  'category' => 'minuman',        'stock' => 30, 'is_featured' => false, 'image' => 'images/products/es-jeruk-peras.jpg',   'description' => 'Jeruk segar diperas langsung, dingin menyegarkan.'],
                 ],
             ],
             [
@@ -58,11 +58,11 @@ class DatabaseSeeder extends Seeder
                     'close_at'    => '15:00:00',
                 ],
                 'products' => [
-                    ['name' => 'Mie Ayam Bakso',      'price' => 12000, 'category' => 'makanan_berat',  'stock' => 0,  'is_featured' => false, 'description' => 'Mie kenyal dengan ayam suwir, bakso kenyal, dan kuah kaldu gurih.'],
-                    ['name' => 'Risol Mayo',           'price' => 4000,  'category' => 'makanan_ringan', 'stock' => 25, 'is_featured' => true,  'description' => 'Risol renyah isi sayuran dan saus mayo creamy.'],
-                    ['name' => 'Lumpia Goreng',        'price' => 3500,  'category' => 'makanan_ringan', 'stock' => 5,  'is_featured' => false, 'description' => 'Lumpia renyah isi rebung dan sayuran, cocok untuk camilan.'],
-                    ['name' => 'Es Cokelat Susu',     'price' => 8000,  'category' => 'minuman',        'stock' => 20, 'is_featured' => true,  'description' => 'Minuman cokelat susu kaya rasa, cocok diminum dingin.'],
-                    ['name' => 'Pudding Cokelat',     'price' => 6000,  'category' => 'dessert',        'stock' => 10, 'is_featured' => false, 'description' => 'Puding lembut rasa cokelat dengan saus vla vanilla.'],
+                    ['name' => 'Mie Ayam Bakso',      'price' => 12000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => false, 'image' => 'images/products/mie-ayam-bakso.jpg',   'description' => 'Mie kenyal dengan ayam suwir, bakso kenyal, dan kuah kaldu gurih.'],
+                    ['name' => 'Risol Mayo',           'price' => 4000,  'category' => 'makanan_ringan', 'stock' => 25, 'is_featured' => true,  'image' => 'images/products/risol-mayo.jpg',       'description' => 'Risol renyah isi sayuran dan saus mayo creamy.'],
+                    ['name' => 'Lumpia Goreng',        'price' => 3500,  'category' => 'makanan_ringan', 'stock' => 5,  'is_featured' => false, 'image' => 'images/products/lumpia-goreng.jpg',    'description' => 'Lumpia renyah isi rebung dan sayuran, cocok untuk camilan.'],
+                    ['name' => 'Es Cokelat Susu',     'price' => 8000,  'category' => 'minuman',        'stock' => 20, 'is_featured' => true,  'image' => 'images/products/es-cokelat-susu.jpg',  'description' => 'Minuman cokelat susu kaya rasa, cocok diminum dingin.'],
+                    ['name' => 'Pudding Cokelat',     'price' => 6000,  'category' => 'dessert',        'stock' => 10, 'is_featured' => false, 'image' => 'images/products/pudding-cokelat.jpg',  'description' => 'Puding lembut rasa cokelat dengan saus vla vanilla.'],
                 ],
             ],
             [
@@ -76,10 +76,10 @@ class DatabaseSeeder extends Seeder
                     'close_at'    => '14:30:00',
                 ],
                 'products' => [
-                    ['name' => 'Ayam Bakar Madu',     'price' => 18000, 'category' => 'makanan_berat',  'stock' => 10, 'is_featured' => true,  'description' => 'Ayam kampung dibakar dengan bumbu madu dan rempah pilihan.'],
-                    ['name' => 'Ikan Lele Bakar',     'price' => 14000, 'category' => 'makanan_berat',  'stock' => 8,  'is_featured' => false, 'description' => 'Lele segar dibakar dengan bumbu kuning khas Jawa.'],
-                    ['name' => 'Nasi Putih',          'price' => 3000,  'category' => 'makanan_berat',  'stock' => 100,'is_featured' => false, 'description' => 'Nasi putih pulen kualitas premium.'],
-                    ['name' => 'Air Mineral 600ml',   'price' => 4000,  'category' => 'minuman',        'stock' => 40, 'is_featured' => false, 'description' => 'Air mineral segar kemasan 600ml.'],
+                    ['name' => 'Ayam Bakar Madu',     'price' => 18000, 'category' => 'makanan_berat',  'stock' => 10, 'is_featured' => true,  'image' => 'images/products/ayam-bakar-madu.jpg',  'description' => 'Ayam kampung dibakar dengan bumbu madu dan rempah pilihan.'],
+                    ['name' => 'Ikan Lele Bakar',     'price' => 14000, 'category' => 'makanan_berat',  'stock' => 8,  'is_featured' => false, 'image' => 'images/products/ikan-lele-bakar.jpg',  'description' => 'Lele segar dibakar dengan bumbu kuning khas Jawa.'],
+                    ['name' => 'Nasi Putih',          'price' => 3000,  'category' => 'makanan_berat',  'stock' => 100,'is_featured' => false, 'image' => 'images/products/nasi-putih.jpg',       'description' => 'Nasi putih pulen kualitas premium.'],
+                    ['name' => 'Air Mineral 600ml',   'price' => 4000,  'category' => 'minuman',        'stock' => 40, 'is_featured' => false, 'image' => 'images/products/air-mineral.jpg',      'description' => 'Air mineral segar kemasan 600ml.'],
                 ],
             ],
         ];
@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->command->info('✅ Seeder e-Kantin berhasil! Data demo sudah tersedia.');
-        $this->command->line('   Admin  : admin@ekantin.test / password');
+        $this->command->line('   Admin  : admin123@gmail.com / password');
         $this->command->line('   Tenant : berkah@ekantin.test / password');
         $this->command->line('   Pelanggan: pelanggan@ekantin.test / password');
     }
