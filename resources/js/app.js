@@ -32,22 +32,16 @@ window.getCartCount = function () {
 /**
  * Tambah produk ke cart.
  */
-window.addToCart = function ({ productId, name, price, tenantId, tenantName }) {
+window.addToCart = function ({ productId, name, price, tenantId, tenantName, image }) {
     const cart = window.getCart();
 
-    // Validasi: cart hanya boleh berisi produk dari 1 tenant
-    const existingTenantIds = [...new Set(Object.values(cart).map(i => i.tenantId))];
-    if (existingTenantIds.length > 0 && !existingTenantIds.includes(tenantId)) {
-        return {
-            success: false,
-            message: `Keranjangmu sudah berisi pesanan dari ${tenantName !== undefined ? existingTenantIds[0] : 'tenant lain'}. Kosongkan keranjang terlebih dahulu?`,
-        };
-    }
+    // Validasi: cart sekarang BOLEH berisi produk dari banyak tenant
+    // Pembatasan sebelumnya dihapus sesuai permintaan user.
 
     if (cart[productId]) {
         cart[productId].quantity += 1;
     } else {
-        cart[productId] = { name, price, quantity: 1, tenantId, tenantName };
+        cart[productId] = { name, price, quantity: 1, tenantId, tenantName, image };
     }
 
     sessionStorage.setItem('ekantin_cart', JSON.stringify(cart));

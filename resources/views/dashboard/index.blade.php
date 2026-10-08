@@ -6,13 +6,26 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     {{-- Header Dashboard --}}
-    <div class="mb-8">
-        <h1 class="text-3xl font-extrabold tracking-tight mb-2" style="color: var(--text-primary);">
-            Pesanan Masuk
-        </h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-            Kelola pesanan pelanggan dan perbarui status pengerjaan.
-        </p>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2" style="color: var(--text-primary);">
+                Pesanan Masuk
+            </h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                Kelola pesanan pelanggan dan perbarui status pengerjaan.
+            </p>
+        </div>
+
+        {{-- Filter Tanggal --}}
+        <form method="GET" action="{{ route('dashboard.index') }}" class="flex items-center gap-2">
+            <label for="filter" class="text-sm font-medium text-slate-600 dark:text-slate-300">Tampilkan:</label>
+            <select name="filter" id="filter" onchange="this.form.submit()" class="text-sm rounded-lg border-slate-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-slate-200 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm py-2 pl-3 pr-8 cursor-pointer">
+                <option value="today" {{ (isset($filter) && $filter == 'today') ? 'selected' : '' }}>Hari Ini</option>
+                <option value="week" {{ (isset($filter) && $filter == 'week') ? 'selected' : '' }}>Minggu Ini</option>
+                <option value="month" {{ (isset($filter) && $filter == 'month') ? 'selected' : '' }}>Bulan Ini</option>
+                <option value="all" {{ (isset($filter) && $filter == 'all') ? 'selected' : '' }}>Semua Waktu</option>
+            </select>
+        </form>
     </div>
 
     {{-- Flash Message --}}

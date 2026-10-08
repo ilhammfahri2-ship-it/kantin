@@ -31,7 +31,7 @@
         {{-- Info Tenant --}}
         <div class="mb-4 px-4 py-3 rounded-xl text-sm" style="background-color: var(--bg-surface-2);">
             <span style="color: var(--text-muted);">Pesanan dari:</span>
-            <span class="font-semibold ml-1" style="color: var(--brand);" x-text="tenantName"></span>
+            <span class="font-semibold ml-1" style="color: var(--brand);" x-text="tenantNames.length === 1 ? tenantNames[0] : tenantNames.length + ' kantin berbeda'"></span>
         </div>
 
         {{-- Daftar Item --}}
@@ -43,24 +43,24 @@
                         <img :src="item.image" :alt="item.name" class="w-10 h-10 rounded-lg object-cover border shrink-0" style="border-color: var(--border-default);">
                     </template>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium truncate" style="color: var(--text-primary);" x-text="item.name"></p>
-                        <p class="text-xs mt-0.5" style="color: var(--text-muted);"
+                        <p class="text-sm font-medium truncate text-gray-900 dark:text-white" x-text="item.name"></p>
+                        <p class="text-xs mt-0.5 text-gray-500 dark:text-gray-400"
                            x-text="'Rp ' + item.price.toLocaleString('id-ID') + ' / porsi'"></p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <button @click="decrease(id)"
-                                class="w-7 h-7 rounded-lg border text-lg leading-none transition-colors duration-100 hover:opacity-70"
-                                style="border-color: var(--border-default); color: var(--text-primary); background: var(--bg-surface-2);"
+                                class="w-7 h-7 rounded-lg border text-lg leading-none transition-colors duration-100 hover:opacity-70 text-gray-900 dark:text-white"
+                                style="border-color: var(--border-default); background: var(--bg-surface-2);"
                                 :aria-label="'Kurangi ' + item.name">−</button>
-                        <span class="w-6 text-center text-sm font-semibold" style="color: var(--text-primary);"
+                        <span class="w-6 text-center text-sm font-semibold text-gray-900 dark:text-white"
                               x-text="item.quantity"></span>
                         <button @click="increase(id)"
-                                class="w-7 h-7 rounded-lg border text-lg leading-none transition-colors duration-100 hover:opacity-70"
-                                style="border-color: var(--border-default); color: var(--text-primary); background: var(--bg-surface-2);"
+                                class="w-7 h-7 rounded-lg border text-lg leading-none transition-colors duration-100 hover:opacity-70 text-gray-900 dark:text-white"
+                                style="border-color: var(--border-default); background: var(--bg-surface-2);"
                                 :aria-label="'Tambah ' + item.name">+</button>
                     </div>
                     <div class="flex flex-col items-end shrink-0 gap-1">
-                        <span class="text-sm font-bold w-24 text-right shrink-0" style="color: var(--text-primary);"
+                        <span class="text-sm font-bold w-24 text-right shrink-0 text-gray-900 dark:text-white"
                               x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></span>
                         <button @click="removeItem(id)" 
                                 class="text-xs flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors"
@@ -77,13 +77,13 @@
 
         {{-- Ringkasan --}}
         <div class="rounded-xl border p-4 mb-6" style="border-color: var(--border-default); background-color: var(--bg-surface);">
-            <div class="flex justify-between text-sm mb-2" style="color: var(--text-secondary);">
+            <div class="flex justify-between text-sm mb-2 text-gray-600 dark:text-gray-300">
                 <span>Subtotal (<span x-text="totalItems"></span> item)</span>
                 <span x-text="'Rp ' + total.toLocaleString('id-ID')"></span>
             </div>
             <div class="border-t pt-3 mt-2 flex justify-between font-bold" style="border-color: var(--border-default);">
-                <span style="color: var(--text-primary);">Total</span>
-                <span style="color: var(--brand);" x-text="'Rp ' + total.toLocaleString('id-ID')"></span>
+                <span class="text-gray-900 dark:text-white">Total</span>
+                <span class="text-emerald-600 dark:text-emerald-400" x-text="'Rp ' + total.toLocaleString('id-ID')"></span>
             </div>
         </div>
 
@@ -144,7 +144,7 @@
                        :class="paymentMethod === 'cash' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'">
                     <input type="radio" x-model="paymentMethod" value="cash" class="text-emerald-600 focus:ring-emerald-500 w-4 h-4">
                     <div>
-                        <span class="block text-sm font-bold" style="color: var(--text-primary);">Uang Tunai (Cash)</span>
+                        <span class="block text-sm font-bold text-gray-900 dark:text-white">Uang Tunai (Cash)</span>
                         <span class="block text-xs" style="color: var(--text-muted);">Bayar di kasir / kantin</span>
                     </div>
                 </label>
@@ -152,7 +152,7 @@
                        :class="paymentMethod === 'qris' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-gray-700'">
                     <input type="radio" x-model="paymentMethod" value="qris" class="text-emerald-600 focus:ring-emerald-500 w-4 h-4">
                     <div>
-                        <span class="block text-sm font-bold" style="color: var(--text-primary);">QRIS</span>
+                        <span class="block text-sm font-bold text-gray-900 dark:text-white">QRIS</span>
                         <span class="block text-xs" style="color: var(--text-muted);">Pembayaran Digital</span>
                     </div>
                 </label>
@@ -209,9 +209,9 @@
             get items() {
                 return Object.entries(this.itemsMap);
             },
-            get tenantName() {
-                const first = Object.values(this.itemsMap)[0];
-                return first ? first.tenantName : '';
+            get tenantNames() {
+                const names = Object.values(this.itemsMap).map(i => i.tenantName);
+                return [...new Set(names)].filter(Boolean);
             },
             get totalItems() {
                 return Object.values(this.itemsMap).reduce((s, i) => s + i.quantity, 0);
@@ -328,7 +328,6 @@
                     },
                     body: JSON.stringify({
                         items: items,
-                        tenant_id: tenantId,
                         notes: this.notes,
                         customer_name: this.customerName,
                         customer_class: this.customerClass,

@@ -43,6 +43,8 @@ class DatabaseSeeder extends Seeder
                 'products' => [
                     ['name' => 'Nasi Ayam Penyet',    'price' => 15000, 'category' => 'makanan_berat',  'stock' => 20, 'is_featured' => true,  'image' => 'images/products/nasi-ayam-penyet.jpg', 'description' => 'Nasi putih dengan ayam penyet crispy, sambal terasi, dan lalapan segar.'],
                     ['name' => 'Nasi Tempe Orek',     'price' => 10000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => false, 'image' => 'images/products/nasi-tempe-orek.jpg',  'description' => 'Nasi putih dengan tempe orek manis pedas khas rumahan.'],
+                    ['name' => 'Nasi Goreng Spesial', 'price' => 18000, 'category' => 'makanan_berat',  'stock' => 25, 'is_featured' => true,  'image' => 'images/products/nasi-goreng-spesial.jpg', 'description' => 'Nasi goreng dengan telur, sosis, bakso, dan ayam suwir.'],
+                    ['name' => 'Telur Dadar Crispy',  'price' => 6000,  'category' => 'makanan_ringan', 'stock' => 30, 'is_featured' => false, 'image' => 'images/products/telur-dadar-crispy.jpg', 'description' => 'Telur dadar tebal dan renyah, nikmat untuk lauk atau camilan.'],
                     ['name' => 'Es Teh Manis',        'price' => 3000,  'category' => 'minuman',        'stock' => 50, 'is_featured' => false, 'image' => 'images/products/es-teh-manis.jpg',     'description' => 'Teh hitam segar dengan es batu dan gula pilihan.'],
                     ['name' => 'Es Jeruk Peras',      'price' => 5000,  'category' => 'minuman',        'stock' => 30, 'is_featured' => false, 'image' => 'images/products/es-jeruk-peras.jpg',   'description' => 'Jeruk segar diperas langsung, dingin menyegarkan.'],
                 ],
@@ -59,9 +61,11 @@ class DatabaseSeeder extends Seeder
                 ],
                 'products' => [
                     ['name' => 'Mie Ayam Bakso',      'price' => 12000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => false, 'image' => 'images/products/mie-ayam-bakso.jpg',   'description' => 'Mie kenyal dengan ayam suwir, bakso kenyal, dan kuah kaldu gurih.'],
+                    ['name' => 'Seblak Jeletot',       'price' => 15000, 'category' => 'makanan_berat',  'stock' => 20, 'is_featured' => true,  'image' => 'images/products/seblak-jeletot.jpg',   'description' => 'Seblak pedas nampol dengan isian kerupuk, sosis, bakso, dan ceker.'],
                     ['name' => 'Risol Mayo',           'price' => 4000,  'category' => 'makanan_ringan', 'stock' => 25, 'is_featured' => true,  'image' => 'images/products/risol-mayo.jpg',       'description' => 'Risol renyah isi sayuran dan saus mayo creamy.'],
                     ['name' => 'Lumpia Goreng',        'price' => 3500,  'category' => 'makanan_ringan', 'stock' => 5,  'is_featured' => false, 'image' => 'images/products/lumpia-goreng.jpg',    'description' => 'Lumpia renyah isi rebung dan sayuran, cocok untuk camilan.'],
                     ['name' => 'Es Cokelat Susu',     'price' => 8000,  'category' => 'minuman',        'stock' => 20, 'is_featured' => true,  'image' => 'images/products/es-cokelat-susu.jpg',  'description' => 'Minuman cokelat susu kaya rasa, cocok diminum dingin.'],
+                    ['name' => 'Kopi Susu Aren',       'price' => 10000, 'category' => 'minuman',        'stock' => 30, 'is_featured' => true,  'image' => 'images/products/kopi-susu-aren.jpg',   'description' => 'Es kopi susu dengan manisnya gula aren asli.'],
                     ['name' => 'Pudding Cokelat',     'price' => 6000,  'category' => 'dessert',        'stock' => 10, 'is_featured' => false, 'image' => 'images/products/pudding-cokelat.jpg',  'description' => 'Puding lembut rasa cokelat dengan saus vla vanilla.'],
                 ],
             ],
@@ -77,7 +81,9 @@ class DatabaseSeeder extends Seeder
                 ],
                 'products' => [
                     ['name' => 'Ayam Bakar Madu',     'price' => 18000, 'category' => 'makanan_berat',  'stock' => 10, 'is_featured' => true,  'image' => 'images/products/ayam-bakar-madu.jpg',  'description' => 'Ayam kampung dibakar dengan bumbu madu dan rempah pilihan.'],
+                    ['name' => 'Cumi Bakar Madu',      'price' => 25000, 'category' => 'makanan_berat',  'stock' => 15, 'is_featured' => true,  'image' => 'images/products/cumi-bakar-madu.jpg',  'description' => 'Cumi segar utuh yang dibakar dengan olesan saus madu pedas manis.'],
                     ['name' => 'Ikan Lele Bakar',     'price' => 14000, 'category' => 'makanan_berat',  'stock' => 8,  'is_featured' => false, 'image' => 'images/products/ikan-lele-bakar.jpg',  'description' => 'Lele segar dibakar dengan bumbu kuning khas Jawa.'],
+                    ['name' => 'Sosis Bakar Jumbo',    'price' => 12000, 'category' => 'makanan_ringan', 'stock' => 20, 'is_featured' => false, 'image' => 'images/products/sosis-bakar-jumbo.jpg',  'description' => 'Sosis sapi ukuran jumbo dibakar dengan saus BBQ.'],
                     ['name' => 'Nasi Putih',          'price' => 3000,  'category' => 'makanan_berat',  'stock' => 100,'is_featured' => false, 'image' => 'images/products/nasi-putih.jpg',       'description' => 'Nasi putih pulen kualitas premium.'],
                     ['name' => 'Air Mineral 600ml',   'price' => 4000,  'category' => 'minuman',        'stock' => 40, 'is_featured' => false, 'image' => 'images/products/air-mineral.jpg',      'description' => 'Air mineral segar kemasan 600ml.'],
                 ],

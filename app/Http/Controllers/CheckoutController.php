@@ -18,7 +18,6 @@ class CheckoutController extends Controller
             'items.*.id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
             'notes' => 'nullable|string',
-            'tenant_id' => 'required|exists:tenants,id',
             'customer_name' => 'required|string|max:255',
             'customer_class' => 'required|string|max:50',
             'payment_method' => 'required|in:cash,qris',
@@ -28,9 +27,8 @@ class CheckoutController extends Controller
 
         DB::beginTransaction();
         try {
-            $subtotal = 0;
-            $orderItems = [];
-
+            // Group request items by tenant_id
+            $itemsByTenant = [];
             foreach ($request->items as $itemData) {
                 $product = Product::findOrFail($itemData['id']);
                 
@@ -44,10 +42,18 @@ class CheckoutController extends Controller
                 // Reduce stock
                 $product->decrement('stock', $itemData['quantity']);
 
-                $itemSubtotal = $product->price * $itemData['quantity'];
-                $subtotal += $itemSubtotal;
+                $tenantId = $product->tenant_id;
+                if (!isset($itemsByTenant[$tenantId])) {
+                    $itemsByTenant[$tenantId] = [
+                        'subtotal' => 0,
+                        'orderItems' => []
+                    ];
+                }
 
-                $orderItems[] = [
+                $itemSubtotal = $product->price * $itemData['quantity'];
+                $itemsByTenant[$tenantId]['subtotal'] += $itemSubtotal;
+
+                $itemsByTenant[$tenantId]['orderItems'][] = [
                     'product_id' => $product->id,
                     'product_name' => $product->name,
                     'price' => $product->price,
@@ -56,32 +62,42 @@ class CheckoutController extends Controller
                 ];
             }
 
-            // Create Order
-            $order = Order::create([
-                'user_id' => $userId,
-                'tenant_id' => $request->tenant_id,
-                'customer_name' => $request->customer_name,
-                'customer_class' => $request->customer_class,
-                'order_number' => 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid()),
-                'status' => 'pending',
-                'payment_status' => 'unpaid',
-                'payment_method' => $request->payment_method,
-                'subtotal' => $subtotal,
-                'total' => $subtotal,
-                'notes' => $request->notes,
-            ]);
+            // Create an order for each tenant
+            $createdOrders = [];
+            foreach ($itemsByTenant as $tenantId => $tenantData) {
+                $order = Order::create([
+                    'user_id' => $userId,
+                    'tenant_id' => $tenantId,
+                    'customer_name' => $request->customer_name,
+                    'customer_class' => $request->customer_class,
+                    'order_number' => 'ORD-' . date('Ymd') . '-' . strtoupper(uniqid()),
+                    'status' => 'pending',
+                    'payment_status' => 'unpaid',
+                    'payment_method' => $request->payment_method,
+                    'subtotal' => $tenantData['subtotal'],
+                    'total' => $tenantData['subtotal'],
+                    'notes' => $request->notes,
+                ]);
 
-            // Save Order Items
-            foreach ($orderItems as $orderItem) {
-                $orderItem['order_id'] = $order->id;
-                OrderItem::create($orderItem);
+                foreach ($tenantData['orderItems'] as $orderItem) {
+                    $orderItem['order_id'] = $order->id;
+                    OrderItem::create($orderItem);
+                }
+                
+                $createdOrders[] = $order;
             }
 
             DB::commit();
+            
+            // If only 1 order, redirect to success page. If multiple, redirect to orders list.
+            $redirectUrl = count($createdOrders) === 1 
+                ? route('checkout.success', $createdOrders[0]->id)
+                : route('orders.index');
+
             return response()->json([
                 'success' => true, 
                 'message' => 'Pesanan berhasil dibuat!', 
-                'redirect_url' => route('checkout.success', $order->id)
+                'redirect_url' => $redirectUrl
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         
@@ -19,6 +19,18 @@ class DashboardController extends Controller
             $query->where('tenant_id', $user->tenant->id);
         }
 
+        // Filter berdasarkan tanggal
+        $filter = $request->query('filter', 'today'); // default: hari ini
+        
+        if ($filter === 'today') {
+            $query->whereDate('created_at', today());
+        } elseif ($filter === 'week') {
+            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+        } elseif ($filter === 'month') {
+            $query->whereMonth('created_at', now()->month)
+                  ->whereYear('created_at', now()->year);
+        }
+
         $orders = $query->get();
 
         // Hitung ringkasan statistik
@@ -27,7 +39,7 @@ class DashboardController extends Controller
         $completedOrdersCount = $orders->where('status', 'completed')->count();
         $pendingOrdersCount = $orders->where('status', 'pending')->count();
 
-        return view('dashboard.index', compact('orders', 'totalRevenue', 'activeOrdersCount', 'completedOrdersCount', 'pendingOrdersCount'));
+        return view('dashboard.index', compact('orders', 'totalRevenue', 'activeOrdersCount', 'completedOrdersCount', 'pendingOrdersCount', 'filter'));
     }
 
     public function updateStatus(Request $request, Order $order)

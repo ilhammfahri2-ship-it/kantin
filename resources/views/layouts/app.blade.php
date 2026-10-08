@@ -209,6 +209,13 @@
                                 <p class="text-xs" style="color: var(--text-muted);">Masuk sebagai</p>
                                 <p class="text-sm font-medium truncate" style="color: var(--text-primary);">{{ auth()->user()->email }}</p>
                             </div>
+                            @if(auth()->user()->isAdmin() || auth()->user()->isTenant())
+                            <a href="{{ route('dashboard.index') }}"
+                               class="flex items-center gap-2.5 px-4 py-2 text-sm font-bold transition-colors duration-100 hover:opacity-75"
+                               style="color: var(--brand);">
+                                Dashboard Panel
+                            </a>
+                            @endif
                             <a href="{{ route('profile.edit') }}"
                                class="flex items-center gap-2.5 px-4 py-2 text-sm transition-colors duration-100 hover:opacity-75"
                                style="color: var(--text-secondary);">

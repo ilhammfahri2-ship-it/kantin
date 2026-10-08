@@ -63,6 +63,9 @@
                 </a>
                 <span class="hidden sm:inline-block w-px h-6 bg-slate-200 dark:bg-gray-700 mx-2"></span>
                 <nav class="hidden sm:flex items-center gap-4 text-sm font-medium">
+                    <a href="{{ route('home') }}" class="text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 flex items-center gap-1 bg-slate-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Halaman Web
+                    </a>
                     <a href="{{ route('dashboard.index') }}" class="{{ request()->routeIs('dashboard.index') ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400' }}">Ringkasan</a>
                     <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400' }}">Produk</a>
                 </nav>

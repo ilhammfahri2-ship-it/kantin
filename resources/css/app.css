@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ─────────────────────────────────────────────────────────────────────────────
    SUMBER BLADE TEMPLATE
@@ -57,10 +58,10 @@
 
 .dark {
     color-scheme: dark;
-    --bg-canvas:        #1a1918; /* Very dark warm charcoal */
-    --bg-surface:       #242220; 
-    --bg-surface-2:     #2e2b28; 
-    --bg-surface-3:     #3a3733; 
+    --bg-canvas:        #0a1128; /* Deep navy blue */
+    --bg-surface:       #141f3e; /* Lighter navy */
+    --bg-surface-2:     #1e2d53; 
+    --bg-surface-3:     #2a3b68; 
     --text-primary:     #e6e1d8; /* Muted bone white */
     --text-secondary:   #b3ad9f; 
     --text-muted:       #807b70; 
