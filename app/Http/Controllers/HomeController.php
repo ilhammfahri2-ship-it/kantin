@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Tenant;
+use App\Services\CanteenSchedule;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,13 +14,9 @@ class HomeController extends Controller
      */
     public function index(Request $request): \Illuminate\View\View
     {
-        // Atur jam operasional kantin (Misal: 06:00 - 16:00 WIB)
-        $now = \Carbon\Carbon::now('Asia/Jakarta');
-        $openTime = \Carbon\Carbon::createFromTime(6, 0, 0, 'Asia/Jakarta');
-        $closeTime = \Carbon\Carbon::createFromTime(16, 0, 0, 'Asia/Jakarta');
-        
-        // Cek apakah sekarang berada di dalam jam operasional
-        $isOpen = $now->between($openTime, $closeTime);
+        // Dapatkan status jam operasional kantin (Sesi 1: 09:30 - 10:00 WIB, Sesi 2: 12:00 - 13:00 WIB)
+        $schedule = CanteenSchedule::getStatus();
+        $isOpen = $schedule['isOpen'];
 
         $products = Product::query()
             ->with('tenant:id,name,slug,status')
@@ -31,6 +28,14 @@ class HomeController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('home', compact('products', 'isOpen', 'openTime', 'closeTime'));
+        $voucher = \App\Models\Voucher::where('code', 'KANTINHEMAT')->first();
+        $userVoucherClaim = null;
+        if (auth()->check() && $voucher) {
+            $userVoucherClaim = \App\Models\VoucherClaim::where('voucher_id', $voucher->id)
+                ->where('user_id', auth()->id())
+                ->first();
+        }
+
+        return view('home', compact('products', 'isOpen', 'schedule', 'voucher', 'userVoucherClaim'));
     }
 }

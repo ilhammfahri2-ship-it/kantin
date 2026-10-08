@@ -43,6 +43,11 @@ class Tenant extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function ingredients(): HasMany
+    {
+        return $this->hasMany(Ingredient::class);
+    }
+
     // ─── Scopes ───────────────────────────────────────────────────────────────
 
     public function scopeActive($query)

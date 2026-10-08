@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'classroom',
     ];
 
     /**
@@ -65,6 +66,12 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    /** Riwayat klaim voucher promo */
+    public function voucherClaims(): HasMany
+    {
+        return $this->hasMany(VoucherClaim::class);
+    }
+
     // ─── Role Helpers ─────────────────────────────────────────────────────────
 
     public function isAdmin(): bool
@@ -80,5 +87,26 @@ class User extends Authenticatable
     public function isCustomer(): bool
     {
         return $this->role === 'customer';
+    }
+
+    /**
+     * Dapatkan kelas pengguna untuk auto-fill data checkout
+     */
+    public function getDisplayClassroomAttribute(): string
+    {
+        if (!empty($this->classroom)) {
+            return $this->classroom;
+        }
+
+        $lastClass = $this->orders()->latest()->value('customer_class');
+        if (!empty($lastClass)) {
+            return $lastClass;
+        }
+
+        return match ($this->role) {
+            'admin'  => 'Admin Sekolah',
+            'tenant' => 'Pengelola Stand',
+            default  => '12 MIPA 1',
+        };
     }
 }

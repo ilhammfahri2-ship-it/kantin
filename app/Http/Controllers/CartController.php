@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CanteenSchedule;
 use Illuminate\Http\Request;
 
 /**
@@ -19,6 +20,28 @@ class CartController extends Controller
      */
     public function index(): \Illuminate\View\View
     {
-        return view('cart.index');
+        $schedule = CanteenSchedule::getStatus();
+        $isOpen = $schedule['isOpen'];
+
+        $activeVoucher = session('active_voucher');
+        if (!$activeVoucher && auth()->check()) {
+            $claim = \App\Models\VoucherClaim::with('voucher')
+                ->where('user_id', auth()->id())
+                ->where('is_used', false)
+                ->latest()
+                ->first();
+
+            if ($claim && $claim->voucher && $claim->voucher->isValid()) {
+                $activeVoucher = [
+                    'id' => $claim->voucher->id,
+                    'code' => $claim->voucher->code,
+                    'name' => $claim->voucher->name,
+                    'discount_percent' => $claim->voucher->discount_percent,
+                ];
+                session(['active_voucher' => $activeVoucher]);
+            }
+        }
+
+        return view('cart.index', compact('schedule', 'isOpen', 'activeVoucher'));
     }
 }

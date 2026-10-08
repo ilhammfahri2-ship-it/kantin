@@ -52,9 +52,11 @@ class ProductController extends Controller
         $data = $request->except('image');
         $data['slug'] = Str::slug($request->name . '-' . time());
         
-        // Tetapkan tenant_id secara otomatis untuk user tenant
+        // Tetapkan tenant_id secara otomatis untuk user tenant atau fallback
         if (auth()->user()->isTenant() && auth()->user()->tenant) {
             $data['tenant_id'] = auth()->user()->tenant->id;
+        } elseif (empty($data['tenant_id'])) {
+            $data['tenant_id'] = \App\Models\Tenant::first()?->id ?? 1;
         }
 
         $data['is_available'] = $request->has('is_available') ? true : false;
@@ -66,6 +68,10 @@ class ProductController extends Controller
         }
 
         Product::create($data);
+
+        if ($request->has('from_dashboard')) {
+            return redirect()->route('dashboard.index', ['tab' => 'products'])->with('success', "Menu '{$request->name}' berhasil ditambahkan ke kantin.");
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -137,9 +143,62 @@ class ProductController extends Controller
     }
 
     /**
+     * Update cepat stok dan harga langsung dari dashboard.
+     */
+    public function quickUpdate(Request $request, Product $product)
+    {
+        $user = auth()->user();
+        if ($user->isTenant() && $user->tenant && $product->tenant_id !== $user->tenant->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'stock' => 'nullable|integer|min:0',
+            'price' => 'nullable|numeric|min:0',
+            'is_available' => 'nullable',
+        ]);
+
+        if ($request->has('stock')) {
+            $product->stock = (int) $request->stock;
+            // Jika stok diisi > 0 dan sebelumnya nonaktif karena habis, otomatis aktifkan
+            if ($product->stock > 0 && !$product->is_available && !$request->has('is_available')) {
+                $product->is_available = true;
+            } elseif ($product->stock == 0 && !$request->has('is_available')) {
+                $product->is_available = false;
+            }
+        }
+
+        if ($request->has('price')) {
+            $product->price = (float) $request->price;
+        }
+
+        if ($request->has('is_available')) {
+            $product->is_available = filter_var($request->is_available, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        $product->save();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Menu '{$product->name}' berhasil diperbarui.",
+                'product' => [
+                    'id' => $product->id,
+                    'stock' => $product->stock,
+                    'price' => $product->price,
+                    'formatted_price' => $product->formatted_price,
+                    'is_available' => $product->is_available,
+                ]
+            ]);
+        }
+
+        return redirect()->route('dashboard.index', ['tab' => 'products'])->with('success', "Menu '{$product->name}' berhasil diperbarui (Stok: {$product->stock}, Harga: {$product->formatted_price}).");
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request, Product $product)
     {
         // Pastikan tenant hanya bisa hapus produknya sendiri
         $user = auth()->user();
@@ -152,6 +211,10 @@ class ProductController extends Controller
         }
         
         $product->delete();
+
+        if ($request->has('from_dashboard')) {
+            return redirect()->route('dashboard.index', ['tab' => 'products'])->with('success', 'Produk berhasil dihapus.');
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
     }
