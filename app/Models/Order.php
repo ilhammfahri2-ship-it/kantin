@@ -21,6 +21,7 @@ class Order extends Model
         'discount',
         'total',
         'notes',
+        'voucher_code',
         'completed_at',
     ];
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ingredient;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,35 +14,57 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         
-        $query = Order::with(['items', 'tenant'])
+        $orderQuery = Order::with(['items', 'tenant'])
             ->orderBy('created_at', 'desc');
 
-        // Jika user adalah tenant, hanya tampilkan pesanan untuk tenant (warung) miliknya
+        $productQuery = Product::with('tenant')->latest();
+        $ingredientQuery = Ingredient::with('tenant')->latest();
+
+        // Jika user adalah tenant, hanya tampilkan pesanan, produk & bahan untuk tenant miliknya
         if ($user && $user->isTenant() && $user->tenant) {
-            $query->where('tenant_id', $user->tenant->id);
+            $orderQuery->where('tenant_id', $user->tenant->id);
+            $productQuery->where('tenant_id', $user->tenant->id);
+            $ingredientQuery->where('tenant_id', $user->tenant->id);
         }
 
-        // Filter berdasarkan tanggal
-        $filter = $request->query('filter', 'today'); // default: hari ini
-        
-        if ($filter === 'today') {
-            $query->whereDate('created_at', today());
-        } elseif ($filter === 'week') {
-            $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($filter === 'month') {
-            $query->whereMonth('created_at', now()->month)
-                  ->whereYear('created_at', now()->year);
-        }
+        $orders = $orderQuery->get();
+        $products = $productQuery->get();
+        $ingredients = $ingredientQuery->get();
 
-        $orders = $query->get();
-
-        // Hitung ringkasan statistik
+        // Hitung ringkasan statistik pesanan
         $totalRevenue = $orders->where('status', 'completed')->sum('total');
         $activeOrdersCount = $orders->whereIn('status', ['pending', 'confirmed', 'preparing', 'ready'])->count();
         $completedOrdersCount = $orders->where('status', 'completed')->count();
         $pendingOrdersCount = $orders->where('status', 'pending')->count();
 
-        return view('dashboard.index', compact('orders', 'totalRevenue', 'activeOrdersCount', 'completedOrdersCount', 'pendingOrdersCount', 'filter'));
+        // Ringkasan statistik produk & stok porsi
+        $totalProductsCount = $products->count();
+        $outOfStockCount = $products->where('stock', '<=', 0)->count();
+        $lowStockCount = $products->where('stock', '>', 0)->where('stock', '<=', 5)->count();
+
+        // Ringkasan statistik bahan baku kantin
+        $totalIngredientsCount = $ingredients->count();
+        $outOfStockIngredientsCount = $ingredients->filter->is_out_of_stock->count();
+        $lowStockIngredientsCount = $ingredients->filter->is_low_stock->count();
+
+        $tenants = Tenant::all();
+
+        return view('dashboard.index', compact(
+            'orders',
+            'products',
+            'ingredients',
+            'totalRevenue',
+            'activeOrdersCount',
+            'completedOrdersCount',
+            'pendingOrdersCount',
+            'totalProductsCount',
+            'outOfStockCount',
+            'lowStockCount',
+            'totalIngredientsCount',
+            'outOfStockIngredientsCount',
+            'lowStockIngredientsCount',
+            'tenants'
+        ));
     }
 
     public function updateStatus(Request $request, Order $order)
